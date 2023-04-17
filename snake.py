@@ -11,10 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import time
 
 import pygame
 import random
+
 # Testing code
 # Define colors
 BLACK = (0, 0, 0)
@@ -36,7 +37,7 @@ pygame.init()
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
 # Set the caption of the window
-pygame.display.set_caption("Snake Game")
+pygame.display.set_caption("Python Xenzia")
 
 # Set up the clock
 clock = pygame.time.Clock()
@@ -45,6 +46,7 @@ clock = pygame.time.Clock()
 # Define the Snake class
 class Snake:
     def __init__(self):
+        self.speed = 10
         self.length = 1
         self.positions = [((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))]
         self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
@@ -75,7 +77,38 @@ class Snake:
         self.length = 1
         self.positions = [((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))]
         self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
+        self.speed = 10
         self.score = 0
+        while True:
+            snake = Snake()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        return
+                    elif event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        quit()
+
+            screen.fill(WHITE)
+            font = pygame.font.SysFont(None, 48)
+            title = font.render("Game Over", True, BLACK)
+            title_rect = title.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50))
+            screen.blit(title, title_rect)
+
+            font = pygame.font.SysFont(None, 24)
+            score_text = "Your score: " + str(snake.score)
+            score = font.render(score_text, True, BLACK)
+            score_rect = score.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+            screen.blit(score, score_rect)
+
+            instructions = font.render("Press Enter to play again or Esc to quit", True, BLACK)
+            instructions_rect = instructions.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 30))
+            screen.blit(instructions, instructions_rect)
+
+            pygame.display.update()
 
     def draw(self, surface):
         for p in self.positions:
